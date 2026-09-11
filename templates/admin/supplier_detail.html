@@ -1,0 +1,61 @@
+{% extends "admin/_layout.html" %}
+{% block title %}{{ supplier['nome'] }} · Admin{% endblock %}
+{% set active_tab = 'dashboard' %}
+{% block admin_content %}
+
+<div class="card">
+  <div class="flex-entre">
+    <div>
+      <h1 class="card-titulo mb-0">{{ supplier['nome'] }}</h1>
+      <p class="card-subtitulo mt-8">
+        {{ supplier['empresa'] }} · {{ supplier['funcao'] }} · CPF {{ supplier['cpf']|cpf }}<br>
+        Categoria: <strong>{{ supplier['category_name'] }}</strong> ·
+        Cadastrado em {{ supplier['created_at']|datahora }}
+      </p>
+    </div>
+    <form method="post" action="{{ url_for('admin.delete_supplier', supplier_id=supplier['id']) }}"
+          onsubmit="return confirm('Excluir este fornecedor e todo o seu histórico de tentativas?');">
+      <button type="submit" class="btn btn-perigo btn-sm">Excluir fornecedor</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="mt-0">Histórico de tentativas na prova</h2>
+  <div class="tabela-wrap">
+    <table>
+      <thead><tr><th>Data</th><th>Nota</th><th>Resultado</th></tr></thead>
+      <tbody>
+        {% for a in attempts %}
+          <tr>
+            <td>{{ a['finished_at']|datahora }}</td>
+            <td>{{ a['score'] }}/{{ a['total'] }}</td>
+            <td>
+              {% if a['passed'] %}<span class="badge badge-aprovado">Aprovado</span>
+              {% else %}<span class="badge badge-reprovado">Reprovado</span>{% endif %}
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="3" class="texto-pequeno">Nenhuma tentativa registrada ainda.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="mt-0">Documentos (ITs/POPs) já lidos</h2>
+  <div class="tabela-wrap">
+    <table>
+      <thead><tr><th>Documento</th><th>Procedimento</th><th>Lido em</th></tr></thead>
+      <tbody>
+        {% for d in read_docs %}
+          <tr><td>{{ d['title'] }}</td><td>{{ d['procedure_code'] }}</td><td>{{ d['read_at']|datahora }}</td></tr>
+        {% else %}
+          <tr><td colspan="3" class="texto-pequeno">Nenhum documento confirmado como lido ainda.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

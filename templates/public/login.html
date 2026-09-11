@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Acesso do Fornecedor · {{ empresa_nome }}{% endblock %}
+{% block content %}
+<div class="container-estreito">
+  <div class="card">
+    <h1 class="card-titulo">Acesso do Fornecedor</h1>
+    <p class="card-subtitulo">
+      Informe o usuário e a senha da sua categoria de fornecimento, fornecidos pela
+      {{ empresa_nome }}. Se você não possui essas credenciais, entre em contato com o
+      responsável pelo contrato.
+    </p>
+    <form method="post">
+      <div class="form-grupo">
+        <label for="username">Usuário da categoria</label>
+        <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+      </div>
+      <div class="form-grupo">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primario btn-bloco">Entrar</button>
+    </form>
+  </div>
+  <p class="texto-pequeno texto-central">
+    É administrador do sistema? <a href="{{ url_for('admin.login') }}">Acessar painel Admin</a>
+  </p>
+</div>
+{% endblock %}
