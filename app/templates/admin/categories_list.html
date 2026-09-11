@@ -1,0 +1,49 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Categorias · Admin{% endblock %}
+{% set active_tab = 'categorias' %}
+{% block admin_content %}
+
+<div class="card">
+  <div class="flex-entre">
+    <div>
+      <h1 class="card-titulo mb-0">Categorias de fornecedores</h1>
+      <p class="card-subtitulo mt-8">
+        Cada categoria tem seu próprio login/senha de acesso e sua lista de ITs/POPs obrigatórios.
+      </p>
+    </div>
+    <a class="btn btn-primario btn-sm" href="{{ url_for('admin.new_category') }}">+ Nova categoria</a>
+  </div>
+
+  <div class="tabela-wrap mt-16">
+    <table>
+      <thead>
+        <tr><th>Categoria</th><th>Setor</th><th>Usuário</th><th>Procedimentos</th><th>Fornecedores</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for c in categories %}
+        <tr>
+          <td>{{ c['name'] }}</td>
+          <td>{{ c['sector'] or '-' }}</td>
+          <td><code>{{ c['username'] }}</code></td>
+          <td>{{ c['num_procedimentos'] }}</td>
+          <td>{{ c['num_fornecedores'] }}</td>
+          <td>
+            {% if c['active'] %}<span class="badge badge-ativo">Ativa</span>
+            {% else %}<span class="badge badge-inativo">Inativa</span>{% endif %}
+          </td>
+          <td class="flex gap-8">
+            <a class="btn btn-fantasma btn-sm" href="{{ url_for('admin.edit_category', category_id=c['id']) }}">Editar</a>
+            {% if c['num_fornecedores'] == 0 %}
+            <form method="post" action="{{ url_for('admin.delete_category', category_id=c['id']) }}"
+                  onsubmit="return confirm('Excluir esta categoria?');">
+              <button type="submit" class="btn btn-perigo btn-sm">Excluir</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Login Admin · {{ empresa_nome }}{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+<div class="container-estreito">
+  <div class="card">
+    <h1 class="card-titulo">Painel Admin</h1>
+    <p class="card-subtitulo">Acesso restrito à equipe {{ empresa_nome }} responsável pelo sistema.</p>
+    <form method="post">
+      <div class="form-grupo">
+        <label for="username">Usuário</label>
+        <input type="text" id="username" name="username" required autofocus>
+      </div>
+      <div class="form-grupo">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-primario btn-bloco">Entrar</button>
+    </form>
+  </div>
+  <p class="texto-pequeno texto-central">
+    <a href="{{ url_for('public.login') }}">← Acesso do fornecedor</a>
+  </p>
+</div>
+{% endblock %}

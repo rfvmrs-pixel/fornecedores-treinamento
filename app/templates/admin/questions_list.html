@@ -1,0 +1,52 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Perguntas da prova · Admin{% endblock %}
+{% set active_tab = 'perguntas' %}
+{% block admin_content %}
+
+<div class="card">
+  <div class="flex-entre">
+    <div>
+      <h1 class="card-titulo mb-0">Perguntas da Avaliação de Regras de Ouro</h1>
+      <p class="card-subtitulo mt-8">
+        Estas são as 10 perguntas oficiais, no modelo de avaliação usado pela {{ empresa_nome }}.
+        Você pode editar o texto e as alternativas a qualquer momento pelo botão "Editar" em cada linha.
+        Apenas perguntas <strong>ativas</strong> aparecem na prova do fornecedor.
+      </p>
+    </div>
+    <a class="btn btn-primario btn-sm" href="{{ url_for('admin.new_question') }}">+ Nova pergunta</a>
+  </div>
+
+  <div class="tabela-wrap mt-16">
+    <table>
+      <thead><tr><th>#</th><th>Enunciado</th><th>Correta</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for q in questions %}
+        <tr>
+          <td>{{ q['order_index'] }}</td>
+          <td>{{ q['text'][:90] }}{{ '…' if q['text']|length > 90 else '' }}</td>
+          <td>{{ q['correct_option']|upper }}</td>
+          <td>
+            {% if q['active'] %}<span class="badge badge-ativo">Ativa</span>
+            {% else %}<span class="badge badge-inativo">Inativa</span>{% endif %}
+          </td>
+          <td class="flex gap-8">
+            <a class="btn btn-fantasma btn-sm" href="{{ url_for('admin.edit_question', question_id=q['id']) }}">Editar</a>
+            <form method="post" action="{{ url_for('admin.toggle_question', question_id=q['id']) }}">
+              <button type="submit" class="btn btn-secundario btn-sm">
+                {{ 'Desativar' if q['active'] else 'Ativar' }}
+              </button>
+            </form>
+            <form method="post" action="{{ url_for('admin.delete_question', question_id=q['id']) }}"
+                  onsubmit="return confirm('Excluir esta pergunta?');">
+              <button type="submit" class="btn btn-perigo btn-sm">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="texto-pequeno">Nenhuma pergunta cadastrada.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

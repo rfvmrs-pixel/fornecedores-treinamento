@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Resultado da prova · {{ empresa_nome }}{% endblock %}
+{% block content %}
+
+<div class="resultado-banner {{ 'resultado-aprovado' if attempt['passed'] else 'resultado-reprovado' }}">
+  <div class="nota">{{ attempt['score'] }}/{{ attempt['total'] }}</div>
+  <h1 class="mt-8 mb-0">
+    {{ 'Aprovado ✅' if attempt['passed'] else 'Reprovado' }}
+  </h1>
+  <p class="texto-pequeno">
+    Prova realizada em {{ attempt['finished_at']|datahora }} — {{ current_supplier['nome'] }} /
+    {{ current_supplier['empresa'] }}
+  </p>
+</div>
+
+<div class="card texto-central">
+  {% if attempt['passed'] %}
+    <p>
+      Parabéns! Você concluiu o treinamento e foi aprovado na Avaliação de Regras de Ouro da
+      {{ empresa_nome }}. Seu resultado já está disponível para consulta pelo Admin.
+    </p>
+    <a class="btn btn-secundario" href="{{ url_for('public.training') }}">Voltar ao treinamento</a>
+  {% else %}
+    <p>
+      Você não atingiu a pontuação mínima exigida (100% de acerto). Revise os documentos de
+      treinamento e tente novamente — o número de tentativas é ilimitado.
+    </p>
+    <a class="btn btn-primario" href="{{ url_for('public.exam') }}">Refazer a prova</a>
+    <a class="btn btn-secundario" href="{{ url_for('public.training') }}">Rever documentos</a>
+  {% endif %}
+</div>
+{% endblock %}
